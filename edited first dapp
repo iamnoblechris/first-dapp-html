@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Token sale page">
+
+    <title>CENTICOIN</title>
+   
+    <script>
+        var test = true; // False if contracts are on Mainnet
+        var contractAddressSale = '0xdBac110739D10dC1de08e42FB178fF29F4b7FD3a';
+        var contractAddressToken = '0x9257838a3D86813F4dC13Be9154c8a9290A56912';
+    </script>
+    
+    <style>
+        
+        body {font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; color: #FF0000; background-color: #000080; font-size: 25px; font-weight: 400;}
+
+        h1 { font-size: 24px; font-weight: 700;}
+        h2 { font-size: 22px; font-weight: 500;}
+
+        .small {
+            font-size: 12px;
+        }
+
+        .err {
+             color: black;
+        }
+        
+        .green {
+             color: green;
+        }
+        
+        .blue {
+             color: blue;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+        
+        a {
+          color: #00FF00;
+          text-decoration: none;
+        }
+        
+        a:hover {
+          color: #C0C0C0;
+        }
+        
+        .clickable {
+            cursor: pointer;
+        }
+        
+        .clickable:hover {
+            color: #C0C0C0;
+        }
+        
+        button {
+          background-color: #000000;
+          border: none;
+          border-radius: 2px;
+          color: gold;
+          padding: 5px 20px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 16px;
+          display: inline-block;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+        
+        button:hover {
+          background-color: #008000;
+        }
+        
+        button[disabled] {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+        
+        hr {
+            margin: 20px;
+            border: 0;
+            border-top: 1px dashed;
+        }
+        
+        input {
+          text-align: center;
+          font-size: 25px;
+          background-color: #000000;
+          color: #000000;
+          border: 0;
+          max-width: 1%;
+          cursor: not-allowed;
+        }
+    </style>
+    
+</head>
+
+<body>
+    
+    <div style="text-align: center">
+        <button id="connect" style="font-size: 30px">Connect</button> <button class="switch" id="addTestBSC" style="font-size: 30px;">To BSC Testnet</button>
+        <span id="nometamask" class="err" style="display: none">Please install Metamask first...</span>
+        <div class="network small"><span id="curnet"><span class="err">Please use DApp browser/extension (e.g. <a target="_blank" href="https://metamask.io">Metamask</a>)</span></span> <span id="myAddr"></span>
+        <span id="referred" style="display:none"><br>Referrer: <span id="referrer"></span></span></div>
+    </div>
+    
+    <div style="text-align: center">
+        <h1>CENTICOIN</h1>
+        <h2>QWERTY (QTY)</h2>
+        <p><a target="_blank" href="https://testnet.bscscan.com/token/0x9257838a3D86813F4dC13Be9154c8a9290A56912" id="tokenAddress">0x9257838a3D86813F4dC13Be9154c8a9290A56912</a></p>
+        <!-- Reserved in case you want to show decimals and total supply: Decimals <span id="#tokenDecimals"></span> Total supply <span id="#tokenSupply"></span>-->
+        <p>Do not send BNB to the token contract!</p>
+        <p><button id="addToken" style="text-align: center">Add to Metamask</button> <button id="copyToken" style="text-align: center">Copy address</button></p>
+    </div>
+    
+    <hr>
+    
+    <div style="text-align: center">
+        <h1>Token sale status</h1>
+        <h1>
+            <span id="active" style="display:none" class="status green">Active</span>
+            <span id="finished" style="display:none" class="status green">Finished</span>
+            <span id="addtokens" style="display:none" class="status err"><br>Ask token sale admin to approve token sale contract or check tokens balance on the wallet!</span>
+        </h1>
+        <p>   THIS TOKEN IS STILL IN TEST MODE </p>
+    </div>
+    <hr>
+    
+    <div style="text-align: center">
+        <h1>AIRDROP</h1>
+        <p>1 BNB = <span class="rate">6.0</span> <span class="tokenSymbol">QTY</span></p>
+        <p><input type="number" id="buyAmount" value="0.002" min="0" readonly="true"></p>
+        <p></p>
+        <p><button id="buyBtn" style="text-align: center">get airdrop</button></p>
+        <p>In my wallet: <span id="myTokens"></span> <span class="tokenSymbol">qty</span></p>
+    </div>
+    <hr>
+    
+    <div style="text-align: center">
+        <h1>Token sale information</h1>
+        <p>Hardcap: <span class="hardcap">10000.0</span> BNB (~ <span class="saleqty">60000.0</span> <span class="tokenSymbol">qty</span>)</p>
+        <p>Rate: 1 BNB = <span class="rate">6.0</span> <span class="tokenSymbol">qty</span> (~ <span class="price">0.16666666666666666</span> BNB/<span class="tokenSymbol">qty</span>)</p>
+
+    </div>
+    <hr>
+    <hr>
+    
+    <div id="refarea" style="text-align: center">
+        <h1>Referral program</h1>
+        <p>Share your referral link and get paid instantly to your wallet for every referred token purchase.</p>
+        <p>Total paid to referrers: 55 BNB</p>
+        <p>Referral commission: <span id="refPercent">10</span>%</p>
+        <p>Your referral earnings: <span id="refMy"></span> BNB</p>
+        
+        <p>Share your referral link or QR code and get commission for referred token purchases instantly to your wallet.</p>
+        <p><input type="text" id="referLink" size="70" readonly="true"> <button id="copyreflink" style="font-size: 30px">Copy link</button></p>
+        <div id="refqrcode">
+            <div style="text-align: center" id="refqr"></div>
+        </div>
+        <p id="refErr" class="err" style="display: none">Please connect your wallet on Binance Smart Chain to generate your referral link!</p>
+    </div>
+    
+<script src='https://dappbuilder.org/js/jquery-3.6.0.min.js' type="text/javascript" charset="utf-8"></script>
+<script src='https://dappbuilder.org/js/ethers-5.0.umd.min.js' type="text/javascript" charset="utf-8"></script>
+<script src='https://dappbuilder.org/bsc/tokensalewithreferral2/js/tokensale.ui.js' type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
